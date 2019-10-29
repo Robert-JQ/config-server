@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.newcapec.configserver.dao.ItemDAO">
+
+  <cache type="com.newcapec.configserver.configuration.RedisCache"/>
+
+  <resultMap id="BaseResultMap" type="com.newcapec.configserver.pojo.model.Item">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="appid" jdbcType="VARCHAR" property="appid" />
+    <result column="envid" jdbcType="INTEGER" property="envid" />
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="is_deleted" jdbcType="INTEGER" property="isDeleted" />
+    <result column="is_public" jdbcType="INTEGER" property="isPublic" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.newcapec.configserver.pojo.model.Item">
+    <result column="value" jdbcType="LONGVARCHAR" property="value" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, appid, envid, `key`, description, is_deleted, is_public, create_time, modified_time
+  </sql>
+  <sql id="Blob_Column_List">
+    `value`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from item
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" flushCache="true">
+    delete from item
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.newcapec.configserver.pojo.model.Item" useGeneratedKeys="true">
+    insert into item (appid, envid, `key`, 
+      description, is_deleted, is_public, 
+      create_time, modified_time, `value`
+      )
+    values (#{appid,jdbcType=VARCHAR}, #{envid,jdbcType=INTEGER}, #{key,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, #{isPublic,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, #{value,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.newcapec.configserver.pojo.model.Item" useGeneratedKeys="true">
+    insert into item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="appid != null">
+        appid,
+      </if>
+      <if test="envid != null">
+        envid,
+      </if>
+      <if test="key != null">
+        `key`,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="isPublic != null">
+        is_public,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="value != null">
+        `value`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="appid != null">
+        #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="envid != null">
+        #{envid,jdbcType=INTEGER},
+      </if>
+      <if test="key != null">
+        #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="isPublic != null">
+        #{isPublic,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="value != null">
+        #{value,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.newcapec.configserver.pojo.model.Item" flushCache="true">
+    update item
+    <set>
+      <if test="appid != null">
+        appid = #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="envid != null">
+        envid = #{envid,jdbcType=INTEGER},
+      </if>
+      <if test="key != null">
+        `key` = #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      </if>
+      <if test="isPublic != null">
+        is_public = #{isPublic,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="value != null">
+        `value` = #{value,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.newcapec.configserver.pojo.model.Item" flushCache="true">
+    update item
+    set appid = #{appid,jdbcType=VARCHAR},
+      envid = #{envid,jdbcType=INTEGER},
+      `key` = #{key,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      is_public = #{isPublic,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      `value` = #{value,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.newcapec.configserver.pojo.model.Item" flushCache="true">
+    update item
+    set appid = #{appid,jdbcType=VARCHAR},
+      envid = #{envid,jdbcType=INTEGER},
+      `key` = #{key,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      is_public = #{isPublic,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="query" parameterType="com.newcapec.configserver.pojo.model.Item" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from item
+    <where>
+      <if test="id != null">
+        id = #{id}
+      </if>
+      <if test="appid != null">
+        and appid = #{appid}
+      </if>
+      <if test="envid != null">
+        and envid = #{envid}
+      </if>
+      <if test="key != null">
+        and `key` = #{key}
+      </if>
+      <if test="description != null">
+        and description = #{description}
+      </if>
+      <if test="isDeleted != null">
+        and is_deleted = #{isDeleted}
+      </if>
+      <if test="isPublic != null">
+        and is_public = #{isPublic}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime}
+      </if>
+      <if test="modifiedTime != null">
+        and modified_time = #{modifiedTime}
+      </if>
+      <if test="value != null">
+        and `value` = #{value}
+      </if>
+    </where>
+  </select>
+  <select id="check" parameterType="com.newcapec.configserver.pojo.model.Item" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from item
+    <where>
+      <if test="id != null">
+        id = #{id}
+      </if>
+      <if test="appid != null">
+        and appid = #{appid}
+      </if>
+      <if test="envid != null">
+        and envid = #{envid}
+      </if>
+      <if test="key != null">
+        and `key` = #{key}
+      </if>
+      <if test="isDeleted != null">
+        and is_deleted = #{isDeleted}
+      </if>
+    </where>
+  </select>
+</mapper>

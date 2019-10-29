@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>配置中心</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">配置中心后台</div>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">应用</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" tab_id="list_app" data-url="../static/app/app.html">应用列表</a></dd>
+                        <dd><a href="javascript:;" tab_id="create_app" data-url="../static/app/add.html">新建应用</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">环境</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" tab_id="list_env" data-url="../static/env/env.html">环境列表</a></dd>
+                        <dd><a href="javascript:;" tab_id="create_env" data-url="../static/env/add.html">新建环境</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">配置项</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" tab_id="list_item" data-url="../static/item/item.html">配置项列表</a></dd>
+                        <dd><a href="javascript:;" tab_id="create_item" data-url="../static/item/add.html">新建配置项</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class="layui-tab" lay-filter="mytab" lay-allowClose="true">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">
+                        <i class="layui-icon">
+                            &#xe620;
+                            <cite>介绍</cite>
+                        </i>
+                    </li>
+                </ul>
+                <div class="layui-tab-content" style="min-height: 800px;border: none">
+                    <div class="layui-tab-item layui-show">
+                        <iframe src="../static/introduce.html"></iframe>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<script src="../static/layui/layui.js"></script>
+<script src="../static/js/jquery/jquery-3.4.1.min.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+        $(document).on('click', 'a', function () {
+            if (!$(this)[0].hasAttribute("tab_id") || $(this).attr("tab_id") === '') {
+                return;
+            }
+            var layid = $(this).attr("tab_id");
+            var text = $(this).text();
+            var dataurl = $(this).attr("data-url");
+            var tabs = $(".layui-tab-title").children();
+            var msg = true;
+            $.each(tabs, function (i, item) {
+                var tabid = $(item).attr("lay-id");
+                if (tabid === layid) {
+                    msg = false;
+                    return false;
+                }
+            });
+            if (msg) {
+                element.tabAdd('mytab', {
+                    title: text,
+                    content: "<iframe frameborder='0' width='100%' height='100%' src='" + dataurl + "'></iframe>",
+                    id: layid
+                });
+            }
+            resize();
+            element.tabChange('mytab', layid);
+        });
+
+        function resize() {
+            var $content = $(".layui-tab-content");
+            $content.height($(this).height() - 200);
+            $content.find('iframe').each(function () {
+                $(this).height($content.height());
+                $(this).width("100%")
+            })
+        }
+
+        $(window).on('resize', function () {
+            var $content = $(".layui-tab-content");
+            $content.height($(this).height() - 200);
+            $content.find('iframe').each(function () {
+                $(this).height($content.height());
+                $(this).width("100%")
+
+            });
+
+        });
+        $(window).on('load', function () {
+            var $content = $(".layui-tab-content");
+            $content.height($(this).height() - 200);
+            $content.find('iframe').each(function () {
+                $(this).height($content.height());
+                $(this).width("100%")
+
+            });
+        })
+    });
+</script>
+</body>
+</html>
